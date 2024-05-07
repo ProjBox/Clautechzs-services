@@ -1,0 +1,339 @@
+
+
+.upform{
+  background: #d1cfcf;
+  border: 1px solid #0c0c0b14;
+  border-radius: 5px;
+}
+
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+ background-color: #ff6600;
+  color: #dddddd;
+  padding: 9px 12px;
+  border: none;
+  cursor: pointer;
+  /*opacity: 0.8;*/
+  /*position: absolute;*/
+  bottom: 23px;
+  /*right: 565px;*/
+  /*width: 210px;*/
+  margin-left: 20px;
+  margin-top: -300px;
+
+  font-size: 14px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  /*box-shadow: 0px 2px 5px 2px rgb(0 0 0 / 49%);*/
+  box-shadow: 0px 2px 5px 2px rgb(151 60 0); 
+}
+.open-button:focus{
+  box-shadow: 0px 2px 5px 2px #d1cfcf;
+  
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: sticky;
+  bottom: 0;
+  /*right: 565px;*/
+  /*border: 3px solid #0ce148;*/
+  z-index: 9;
+  padding: 9px;
+
+  color: #0c0c0b91;
+  width: 50%;
+  margin-left: 285px;
+  margin-bottom: -50px;
+
+  border-radius: 5px;
+
+  box-shadow: 0px 5px 12px 0px rgb(0 0 0 / 44%);
+}
+
+.form-container{
+
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+
+/* Full-width input fields */
+.form-container input[type=text], .form-container input[type=email], .form-container input[type=phone] {
+  width: 90%;
+  padding: 15px;
+  /*margin: 5px 0 22px 0;*/
+  border: none;
+  /*background: #f1f1f1;*/
+  border-radius: 4px;
+
+  box-shadow: rgba(0,0,0,.24) 0px 3px 4px;
+}
+
+textarea {
+
+  border: none;
+
+  width: 90%;
+
+}
+
+.form-container input[type=text]:focus {
+    outline: 2px solid #ff660085;
+    /*outline: 2px solid #0ce14887;*/
+    /*border: 2px solid #0ce148;*/
+}
+.form-container input[type=email]:focus {
+    outline: 2px solid #ff660085;
+    /*outline: 2px solid #0ce14887;*/
+    /*border: 2px solid #0ce148;*/
+}
+
+.form-container input[type=phone]:focus {
+    outline: 2px solid #ff660085;
+    /*outline: 2px solid #0ce14887;*/
+    /*border: 2px solid #0ce148;*/
+}
+.form-container textarea:focus {
+    outline: 2px solid #ff660085;
+    /*outline: 2px solid #0ce14887;*/
+    /*border: 2px solid #0ce148;*/
+}
+
+
+
+
+
+
+/* Add a red background color to the cancel button */
+.form-container .cancel {
+  background-color: #ff6600;
+  padding: 6px 16px;
+  border-radius: 4px;
+  /*color: #dbdbdb;*/
+  color: #ffffff;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  font-size: 17px;
+  font-weight: 700 !important;
+
+  margin-right: -9px;
+  margin-top: -8.5px;
+}
+
+.cancel-cont{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+
+/* ===================== FILE INPUT ===================== */
+.file-pane {
+  width: 100%;
+  position: relative;}
+  
+  input[type=file] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .file-kick {
+    width: 100%;
+    padding: 30px;
+    background: rgba(255,255,255,0.2);
+    border: 2px dashed rgba(255,255,255,0.2);
+    text-align: center;
+    transition: background 0.3s ease-in-out;
+
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    border-radius: 4px;
+  }
+  
+ 
+  
+  &:hover .file-kick {
+    background: rgba(255,255,255,0.1);
+  }
+  
+ .form-popup input[type=file]:focus + .file-kick {
+    /*outline: 2px solid rgba(255,255,255,0.5);*/
+    outline: 2px solid #ff660085;
+    /*outline: 2px solid #0ce14887;*/
+    /*outline: -webkit-focus-ring-color auto 5px;*/
+
+  }
+  
+  .form-popup input[type=file]:valid + .file-kick {
+    border-color: rgba(0,255,0,0.4);
+    background-color: rgba(0,255,0,0.3);
+  }
+  .form-popup input[type=file]:valid + .file-kick:before {
+    border-color: rgba(0,255,0,0.4);
+    background-color: rgba(0,255,0,0.3);
+    content: "File Selected! ";
+  }
+
+    .success {
+      display: none;
+    }
+    .default {
+      display: inline-block;
+    }
+   .default p{
+      font-size: 11px;
+    }
+  
+
+
+/* ===================== BASIC STYLING ===================== */
+
+
+.form-popup label {
+  font-weight: 500;
+  display: block;
+  margin: 4px 0;
+  text-transform: uppercase;
+  font-size: 13px;
+  overflow: hidden;}
+  
+  .form-popup span {
+    /*float: right;*/
+    text-transform: none;
+    font-weight: 200;
+    /*line-height: 1em;*/
+    font-style: italic;
+    opacity: 0.8;
+
+    /*padding: 8px;*/
+    /*margin-left: 100px;*/
+    font-size: 12px;
+  }
+
+
+.form-set {
+  display: block;
+  padding: 8px 16px;
+  width: 90%;
+  font-size: 16px;
+  background-color: rgb(233 233 233);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #201f1f;
+  font-weight: 200;}
+  
+  &:focus {
+    outline: 2px solid rgba(255,255,255,0.5);
+    outline: -webkit-focus-ring-color auto 5px;
+  }
+
+
+.form-popup button {
+  padding: 15px 30px;
+  border-radius: 4px;
+
+  background: #ff6600;
+  color: #015025;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 11px;
+  border: 0;
+  /*text-shadow: 0 1px 1px #015025;*/
+  cursor: pointer;
+}
+
+.form-popup button[type=submit]{
+
+  color: #eaf1ed;
+}
+
+
+.form-popup button[type=submit]:hover{
+
+    background: darkgreen;
+}
+
+
+.form-group {
+  max-width: 500px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+
+.subinput {
+
+  box-shadow: rgba(0,0,0,.24) 0px 3px 4px;
+}
+
+@media only screen and (max-width: 550px){
+.form-popup {
+  width: 100%;
+  margin: 0;
+  }
+
+.open-button {
+   
+}
+
+
+}
+
+/*fontawesom*/
+.c{
+
+  margin-left: -22px;
+}
+.u{
+
+  margin-right: 6.5px;
+  font-weight: 200;
+  color: #ddd;
+}
+.t{
+
+  font-size: 18px !important;
+  /*margin-right: 4px;
+*/
+  margin-right: -15px;
+  margin-left: 35px;
+}
+
+/*Custum/adjustment(boottrap)*/
+.btn:focus {
+     outline: none !important; 
+
+    color: #ff6600 !important;
+    background-color: #c9302c05 !important;
+    border-color: #ff6600 !important;
+}
