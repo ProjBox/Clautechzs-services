@@ -16,7 +16,7 @@
 
 	<!-- 6# index bot consent -->
 	<meta name="robots" content="index, follow">
-
+ 
 	<!-- ===TWISTER== -->
 	<!-- 7# og sets facebook/linkin intigration -->
 	<meta property="og:type" content="website" />
@@ -751,7 +751,7 @@ client.getEntries()
     //  dynamic model population
     products.forEach((product) => {
       // const productId = product.sys.productId; 
-      const productId = product.fields.productId;
+      const productId = product.fields.productIdx;
       const productBrand = product.fields.brand ? product.fields.brand : '';
       const productDiscount = product.fields.percentageDiscount;
       const productName = product.fields.productName;
