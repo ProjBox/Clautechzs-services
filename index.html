@@ -318,7 +318,7 @@
 	                    <div class="form-row">
 	                    	<div class="col-md-4 mb-3 form-ins-cont demandItem">
 	                    		<input type="text" id="demandItem" placeholder="Demands" value="Demands" name="entry.1567565713" readonly>
-	                    		<input type="text" id="authority" placeholder="authority" value="Clautechzs" name="entry.1696031714" readonly>
+	                    		<input type="text" id="authority" placeholder="authority" value="CLautechzs" name="entry.1696031714" readonly>
 	                    	</div>
 	                        <div class="col-md-4 mb-3 form-ins-cont">
 	                            <label for="name">Name:</label>
@@ -750,8 +750,8 @@ client.getEntries()
     const products = response.items;
     //  dynamic model population
     products.forEach((product) => {
-      const productId = product.sys.productId; 
-      // const productBrand = product.fields.brandcore;
+      // const productId = product.sys.productId; 
+      const productId = product.fields.productId;
       const productBrand = product.fields.brand ? product.fields.brand : '';
       const productDiscount = product.fields.percentageDiscount;
       const productName = product.fields.productName;
