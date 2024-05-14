@@ -618,6 +618,34 @@
 	  });
 </script>
 
+<script type="text/javascript">
+	
+	// scroll to the element corresponding to the hash fragment in the URL
+	function scrollToHashElement() {
+	  // Get the hash fragment from the URL
+	  const hash = window.location.hash;
+	  // If a hash fragment exists
+	  if (hash) {
+	    // Scroll to the element corresponding to the hash
+	    scrollToElement(hash.substring(1)); // Remove the '#' character 
+	  }
+	}
+
+	// Scroll to a specific element by ID
+	function scrollToElement(id) {
+	  // Scroll to the element with the specified ID
+	  const element = document.getElementById(id);
+	  if (element) {
+	    element.scrollIntoView({ behavior: 'smooth' });
+	  }
+	}
+
+	// Call scrollToHashElement when the page loads
+	window.addEventListener('load', scrollToHashElement);
+
+
+</script>
+
 
 <script type="text/javascript">
 
