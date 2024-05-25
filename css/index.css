@@ -1641,7 +1641,9 @@
 
             .fmcontrol {
 
-                padding: 6px;
+                /*padding: 6px;*/
+                padding: 10px;
+                padding-bottom: 40px;
             }
 
            #update {
