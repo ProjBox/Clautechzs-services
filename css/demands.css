@@ -866,18 +866,19 @@ big{
     align-content: center;
     justify-content: center;
     align-items: flex-start;
+    flex-direction: column;
 }
 
 
 .demandsForm{
 
-    width: 42%;
+    width: 62%;
     padding: 6px;
 }
 
 .demandsPost{
 
-    width: 57%;
+    width: 30%;
 
     display: flex;
     flex-direction: column;
@@ -1451,6 +1452,12 @@ hr:not([size]) {
     padding: 15px;
     margin-top: 20px;
 }
+.adserCont{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .adservices div {
 
@@ -1459,8 +1466,9 @@ hr:not([size]) {
 
 .adservices img {
 
-    width: 100%;
-    height: 500px;
+    width: 68%;
+    /*height: 500px;*/
+    height: auto;
 
     border-radius: 10px;
 }
@@ -1469,6 +1477,7 @@ hr:not([size]) {
 
     .adservices img{
 
+        width: 85%;
         height: auto !important;
     }
 
