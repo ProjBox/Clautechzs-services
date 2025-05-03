@@ -1,4 +1,11 @@
-// const contentful = require('contentful')
+
+
+//*** Js Block initiated and designed by Ben Alley ***
+//*** @ benedictokechukwuemail@gmail.com, ben@benalley.net ***
+//*** Promoted by Clautechzs.com e-commerce production 2023/2024 **
+// ------------------------------------------------------------
+
+//*==Contentful CMS API Blocks*==
 
 var client = contentful.createClient({
   space: '1ktjd8goaqzp',
@@ -6,14 +13,14 @@ var client = contentful.createClient({
 });
 
 
-
 // Item Dynamic**
 client.getEntries()
   .then((response) => {
     const products = response.items;
-    //  dynamic model population
+    //+++dynamic model population+++
     products.forEach((product) => {
-      const productId = product.sys.productIdcore; 
+      // const productId = product.sys.productIdcore;
+      const productId = product.fields.productIdcore; 
       // const productBrand = product.fields.brandcore;
       const productBrand = product.fields.brandcore ? product.fields.brandcore : '';
       const productDiscount = product.fields.discountcore;
@@ -23,7 +30,8 @@ client.getEntries()
       const productOldPrice = product.fields.oldpricecore;
       const productPrice = product.fields.pricecore;
       const productImage = 'https:' + product.fields.imagecore.fields.file.url;
-      // Markup append to the DOM
+
+      //+++Markup append to the DOM++
       const productElement = document.createElement('div');
       productElement.classList.add('products');
       productElement.setAttribute('id', productId);
@@ -42,14 +50,16 @@ client.getEntries()
         <p class="product-price">${productPrice}</p>
         <button class="add-to-cart">BUY</button>
       `;
-      document.getElementById('shop').appendChild(productElement);
+      // document.getElementById('shop').appendChild(productElement);
+      document.getElementById('Recent-Post').appendChild(productElement);
+      
 
-      // Inside the forEach loop for products
-      // Find the spans within the product element
+      //+++Inside the forEach loop for products+++
+      //+++Find the spans within the product element+++
       const newSpan = productElement.querySelector('.new');
       const percentSpan = productElement.querySelector('.percent');
 
-      // Check if spans are empty and apply styling accordingly
+      //+++Check if spans are empty and apply styling+++
       if (newSpan.textContent.trim() === '') {
           newSpan.style.display = 'none';
           percentSpan.style.marginLeft = '-51px';
@@ -59,7 +69,6 @@ client.getEntries()
       if (percentSpan.textContent.trim() === '') {
           percentSpan.style.display = 'none';
       }
-
  
     });
   })
@@ -71,11 +80,11 @@ client.getEntries()
 
 // Item Static**
 const entryIdToElementIdMap = {
+    // Mapping++
     '7e3WdPW6D70r3kQmGFJ7xb': 'InfinixCharger',
     '1oQWcileLrxC6m10wgr8nX': 'OraimoCharger',
     'amnFTwQk5WfBZTpCGaoaN': 'sevenstartypeccord',
-    // More mappings Continue..
-    '50S0UEcdY5CIJXOhSpVDCc': 'gamepad',
+    '3ID4I7eS5rI6JHJ6aglUmL': 'gamepad',
     '3EihFFavRmIlnsB08Il1J4': 'pclock',
     'L4PqaMHVMJBIKr64IGUWj': 'SelfShineshoe',
     '6IwEhyczQLxQF3PHuSYYmC': 'wirelessmouse',
@@ -108,18 +117,18 @@ const entryIdToElementIdMap = {
     '1pw52IEhe0t6hDjoBXkF3q': 'DoubleWiredGamepd',
     '5lHZ2fAbTZq1zfGEongGXy': 'fingerbattrey',
     '3Y0s5xi3KBhgb3wDlYfxei': 'itelandroidcord',
-    // Recent Shipments Slider
+    //++Recent Shipments Slider++
     '54rBMEHevUGyTaVQjIHoZt': 'BrownlaptopBagshipment',
     '3hBNJdDOm6HEi6Xj8Dk4df': 'BlackSportsTrackshipment',
     '4ZY0e6qBeO1lbfVtdd5wvY': 'sandiskflashshipment',
     '7o7Sn1QgzR0BhLlYFrONv8': 'whiteLeatherShoeshipment',
-    '2GC9Yd39HITmuCIvrguC8A': 'oraimotypeCchargershipment',
+    '2mDRqDKlfxf43f6CWEYiBm': 'oraimotypeCchargershipment',
     '1kx2LAc8RN6jMerJGnkoTE': 'oraimoPowerBank2shipment',
     'ECa1KNpypKgfELvYBzo8m': 'XboxSingleGamepdshipment'
 
 };
 
-// Function to fetch product data from Contentful
+// Contentful API
 function fetchProductData(entryId) {
     const spaceId = '1ktjd8goaqzp';
     const accessToken = '5pFTo6OedVnD8jk9CBTZLY5MSRJgWv_bWKk5UDUGzxY';
@@ -139,7 +148,7 @@ function fetchProductData(entryId) {
                 productCategory: entry.fields.productCategory,
                 oldprice: entry.fields.oldprice,
                 price: entry.fields.price,
-                imageUrl: 'https:' + entry.fields.image.fields.file.url // Assuming 'image' is a reference to an asset
+                imageUrl: 'https:' + entry.fields.image.fields.file.url
             };
         })
         .catch(error => {
@@ -148,7 +157,6 @@ function fetchProductData(entryId) {
         });
 }
 
-// Function to update product information on the webpage
 function updateProductInformation(entryId) {
     const productElementId = entryIdToElementIdMap[entryId];
     const productElement = document.getElementById(productElementId);
@@ -169,7 +177,6 @@ function updateProductInformation(entryId) {
                 productImageElement.src = product.imageUrl;
                 productImageElement.classList.remove('hidden');
 
-                // Call handleSpans() after updating product information
                 handleSpans();
 
             } else {
@@ -181,7 +188,7 @@ function updateProductInformation(entryId) {
     }
 }
 
-// Update individual product information based on Contentful entries
+//+++Update  product information from Contentful entries+++
 Object.keys(entryIdToElementIdMap).forEach(entryId => {
     updateProductInformation(entryId);
 });

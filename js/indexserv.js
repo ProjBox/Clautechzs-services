@@ -1,3 +1,7 @@
+//*** Js Block initiated and designed by Ben Alley ***
+//*** @ benedictokechukwuemail@gmail.com, ben@benalley.net ***
+//*** Promoted by Clautechzs.com e-commerce production 2023/2024 **
+// ------------------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", function() {
         /*__==Global Variables==__*/
@@ -9,13 +13,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const cartTableBody = document.getElementById('cart-table-body');
         const subtotal = document.getElementById('subtotal');
         const total = document.getElementById('total');
-
-
+        let totalQuantity = 0;
 
 
         let timerObject = {
                 timer: null,
-                timeLeft: 15 * 60 // 15 minutes in seconds
+                timeLeft: 15 * 60
             };
 
 
@@ -29,12 +32,31 @@ document.addEventListener("DOMContentLoaded", function() {
             'total': 0
         };
 
+        function handleBeforeUnload(event) {
+            const currentStep = 2; 
+            if (currentStep === 2 || currentStep === 3) { 
+
+                event.preventDefault();
+                event.returnValue = ''; 
+                return '';
+            }
+        }
+
+        function addBeforeUnloadListener() {
+            window.addEventListener('beforeunload', handleBeforeUnload);
+        }
+
+        function removeBeforeUnloadListener() {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        }
+
+
 
         //*Keep Shopping Button Control*
         const keepShoppingButton = document.getElementById('ks');
         if (keepShoppingButton) {
             keepShoppingButton.addEventListener('click', function() {
-                cartWrapper.classList.add('close'); // This closes the cart.
+                cartWrapper.classList.add('close'); 
             });
         }
 
@@ -61,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         /*==Timer==*/
         function startTimer() {
-            stopTimer(); // Ensure no existing timers are running
+            stopTimer();
 
             timerObject.timer = setInterval(function() {
                 timerObject.timeLeft--;
@@ -69,24 +91,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 let seconds = timerObject.timeLeft % 60;
                 
                 if(seconds < 10) {
-                    seconds = '0' + seconds; // format to look like 02s instead of 2s
+                    seconds = '0' + seconds;
                 }
 
                 document.getElementById("countdown").textContent = `${minutes}m ${seconds}s`;
 
                 if (timerObject.timeLeft <= 0) {
-                    stopTimer(); // Clear the interval
+                    stopTimer(); 
                     alert("Time's up! Order has been cancelled.");
 
                     clearCart();
-                    cartWrapper.classList.add('close'); // Close the cart
-                    location.reload(); // Refresh the page  
+                    cartWrapper.classList.add('close'); 
+                    location.reload(); 
                 }
             }, 1000);
         }
 
 
-        /*__Radio Buttons Modifications 2__*/
+        /*__Radio Buttons Block__*/
         const bankRadios = document.querySelectorAll(".bank-radio");
 
                 bankRadios.forEach(function(radio) {
@@ -114,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
         /*__==Product Cart Control==__*/
         /*__=============================__*/
 
-        function addToCart(event) {
+    function addToCart(event) {
 
             if (added.includes(event.target.parentElement.id)) {
                 duplicateId = '#' + event.target.parentElement.id;
@@ -143,8 +165,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateTotal();
             });
 
-
-            // Capture product details
+            //*__Capture product details__*
             let product = event.target.parentNode;
             let productId = product.id;
             added.unshift(productId);
@@ -158,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             itemClass[productId] = thisClass;
 
-            //*Add to cart model*
+            //*__Add to cart model__*
             cart.items.push({
                 'product': productId,
                 'productName': productName,
@@ -166,8 +187,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 'productUpdatedPrice': productUpdatedPrice,
             });
 
-            // Add a new row for image in image table
             let imageTableRow = document.createElement('tr');
+
+            let imgRowId = `img-${productId}`;
+            imageTableRow.setAttribute('id', imgRowId);
             document.getElementById('cart-table-img-body').appendChild(imageTableRow);
 
             let imageCell = imageTableRow.insertCell(0);
@@ -176,9 +199,10 @@ document.addEventListener("DOMContentLoaded", function() {
             productImage.classList.add('thumbnail');
             imageCell.appendChild(productImage);
 
-            // Add a new row for each product in main table
+            //*__Add a new row for each product in main table__*
             let productRow = document.createElement('tr');
             productRow.setAttribute('id', productId);
+            productRow.setAttribute('data-img-row-id', `img-${productId}`);
             cartTableBody.appendChild(productRow);
 
             let nameCell = productRow.insertCell(0);
@@ -211,156 +235,60 @@ document.addEventListener("DOMContentLoaded", function() {
 
             $('.slider').toggleClass('close');
             
-            // Ensure the cart-table-img-body, subtotal and total are set to display
             document.getElementById('cart-table-img-body').style.display = 'table-row-group';
             document.getElementById('subtotal').style.display = 'block'; 
             document.getElementById('total').style.display = 'block'; 
 
-            // Update details after increasing quantity
+            updateCartCount();
+
+
+            //*__Update details after increasing quantity__*
             updateQuantity(event.target);
             updateSubtotal();
             updateTotal();
             populateProductDetailsInput();
 
+            updateTotalQuantity();     
+
         }
 
-
-
-
-        // @@ENHANCED@@
-
-        // Updated addToCart function
-// function addToCart(event) {
-//     const clickedButton = event.target;
-    
-//     // Check if the clicked element is the "BUY" button
-//     if (!clickedButton.classList.contains('add-to-cart')) return;
-
-//     const product = clickedButton.closest('.products');
-//     if (!product) return; // If the product element is not found, exit
-
-//     const productId = product.id;
-
-//     // Check if the product is already in the cart
-//     if (added.includes(productId)) {
-//         // Handle duplicate product
-//         // Increment quantity or any other action you want to perform
-
-//         duplicateId = '#' + event.target.parentElement.id;
-//         const quantityInput = cartTableBody.querySelector(duplicateId).querySelector('.quantity-value');
-//         quantityInput.value++;
-
-//         // Update details after increasing quantity
-//         updateQuantity(quantityInput);
-//         updateSubtotal();
-//         updateTotal();
-//         populateProductDetailsInput();
-
-//         return;
-//     }
-
-//     // Capture product details
-//     const productName = product.querySelector('.product-name').textContent;
-//     const productImageSrc = product.querySelector('.product-image').src;
-//     const productPrice = parseFloat(product.querySelector('.product-price').getAttribute('value'));
-    
-//     let productUpdatedPrice = productPrice;
-
-//     // Add product to the cart
-//     cart.items.push({
-//         'product': productId,
-//         'productName': productName,
-//         'productPrice': productPrice,
-//         // Add any additional product details here
-//         'productUpdatedPrice': productUpdatedPrice,
-//     });
-
-//     // Update UI or perform any other action as needed
-//     // For example, update the cart display, total price, etc.
-
-//     // Add a new row for image in image table
-//     let imageTableRow = document.createElement('tr');
-//     document.getElementById('cart-table-img-body').appendChild(imageTableRow);
-
-//     let imageCell = imageTableRow.insertCell(0);
-//     let productImage = document.createElement('img');
-//     productImage.src = productImageSrc;
-//     productImage.classList.add('thumbnail');
-//     imageCell.appendChild(productImage);
-
-//     // Add a new row for each product in main table
-//     let productRow = document.createElement('tr');
-//     productRow.setAttribute('id', productId);
-//     cartTableBody.appendChild(productRow);
-
-//     let nameCell = productRow.insertCell(0);
-//     nameCell.innerHTML = productName;
-
-//     let quantityCell = productRow.insertCell(1);
-//     quantityCell.innerHTML = cartProductQuantity;
-//     quantityCell.setAttribute('id', 'quantity');
-
-//     let priceCell = productRow.insertCell(2);
-//     priceCell.innerHTML = productPrice;
-//     priceCell.setAttribute('id', 'product-price');
-//     priceCell.setAttribute('class', 'cart-product-price');
-
-//     let updatedPriceCell = productRow.insertCell(3);
-//     updatedPriceCell.innerHTML = productPrice;
-//     updatedPriceCell.setAttribute('id', 'updated-product-price');
-//     updatedPriceCell.setAttribute('class', 'cart-updated-product-price');
-
-//     let updateBtnCell = productRow.insertCell(4);
-//     updateBtnCell.innerHTML = "<button type='button' id='update' onclick='updateTotal()'><i class='fa fa-refresh' aria-hidden='true'></i></button>";
-
-//     let removeBtnCell = productRow.insertCell(5);
-//     removeBtnCell.innerHTML = productRemove;
-
-//     updateSubtotal();
-//     updateTotal();
-//     updateButtonVisibility();
-//     populateProductDetailsInput();
-
-//     $('.slider').toggleClass('close');
-    
-//     // Ensure the cart-table-img-body, subtotal and total are set to display
-//     document.getElementById('cart-table-img-body').style.display = 'table-row-group';
-//     document.getElementById('subtotal').style.display = 'block'; 
-//     document.getElementById('total').style.display = 'block'; 
-
-//     // Ensure the added product is marked to prevent duplicates
-//     added.unshift(productId);
-// }
-
-
-
-
         /*==Cart Remove Controls==*/
-        function removeFromCart(event) {
-            event.preventDefault(); 
+    function removeFromCart(event) {
 
-            let parentRow = event.target.closest('tr');
-            if (!parentRow) return;
+       let parentRow = event.target.closest('tr');
+        if (!parentRow) return;
 
-            let parentBody = parentRow.parentNode;
-            let parentRowId = parentRow.id;
+        let productId = parentRow.id;
 
-            // Remove the main item
-            parentBody.removeChild(parentRow);
+        parentRow.remove();
 
-            // Update added items list
-            var index = added.indexOf(parentRowId);
-            if (index !== -1) {
-                added.splice(index, 1);
-            }
+        let imgRowId = `img-${productId}`;
+        console.log("Image Row ID:", imgRowId);
+        let imgRow = document.getElementById(imgRowId);
+        console.log("Image Row:", imgRow);
+        if (imgRow) {
+            imgRow.remove();
+            updateSubtotal();
+            updateTotal();
 
-            // Update cart items list
-            for (let item of cart.items) {
-                if (item.product === parentRowId) {
-                    let idx = cart.items.indexOf(item);
-                    cart.items.splice(idx, 1);
-                }
-            }
+            updateCartCount();
+
+        } else {
+            console.log("Image row not found!");
+            updateSubtotal();
+            updateTotal();
+            updateCartCount();
+        }
+
+        let index = added.indexOf(productId);
+        if (index !== -1) {
+            added.splice(index, 1);
+        }
+
+        //*__Update cart items list__*
+        cart.items = cart.items.filter(item => item.product !== productId);
+
+        updateCartCount();
 
             cartTableBody.addEventListener('input', function(event) {
                 if (event.target && event.target.classList.contains('quantity-value')) {
@@ -375,27 +303,16 @@ document.addEventListener("DOMContentLoaded", function() {
                     updateTotal();
                     populateProductDetailsInput()
 
-            });
+        });
 
 
-            //*Remove the thumbnail*
-            let imgTableBody = document.getElementById('cart-table-img-body');
-            let imgRow = imgTableBody.querySelector('tr');
-            if (imgRow) {
-                imgTableBody.removeChild(imgRow);
-
-                updateSubtotal();
-                updateTotal();
-            }
-
-            /*__Empty Cart Modifications 1__*/
-            //*If no items remain in the cart, hide necessary elements*
+            /*__Empty Cart Block__*/
             if (cart.items.length == 0) {
                 document.getElementById('checkout').style.display = 'none';
                 document.getElementById('subtotal').style.display = 'none'; 
                 document.getElementById('total').style.display = 'none'; 
                 document.getElementById('cart-table-img-body').style.display = 'none'; 
-            } else {  // If there are items, ensure these elements are visible
+            } else {  
                 document.getElementById('checkout').style.display = 'block';
                 document.getElementById('subtotal-wrapper').style.display = 'block'; 
                 document.getElementById('total-wrapper').style.display = 'block'; 
@@ -403,12 +320,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             
            
-            /*__Empty Cart Modifications 2__*/
-            // Check if cart is empty
+            /*__Check if cart is empty__*/
             if (cart.items.length === 0) {
-                cartWrapper.classList.add('close'); // Close the cart
-                location.reload(); // Refresh the page
+                cartWrapper.classList.add('close'); 
+                location.reload(); 
                 }
+                 updateCartCount();
 
              }
 
@@ -437,14 +354,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 
             }
 
-            //*Getting the input value of quantity and converting to a number*
             let inputQuantityValue = Number(inputElem.value);
 
             if (inputQuantityValue <= 0) {
                 removeFromCart(inputElem);
             } else {
-                let totalPrice = inputQuantityValue * productPrice;  // Multiplying the quantity with the product price
-                updatedPrice.innerHTML = totalPrice.toFixed(2);  // Setting the updated price
+                let totalPrice = inputQuantityValue * productPrice;  
+                updatedPrice.innerHTML = totalPrice.toFixed(2); 
 
                 for (let item of cart.items) {
                     if (item.product === parentRowId) {
@@ -506,17 +422,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
 
-        /*__Fill the Product Details Input field__*/
+        /*__Product Details Input field__*/
         function populateProductDetailsInput() {
-            // Constructing the product details string
             let detailsArray = cart.items.map(item => {
                 const qty = document.querySelector(`#${item.product} .quantity-value`).value;
                 return `${item.productName} (Qty: ${qty} Price: ₦${(item.productPrice).toFixed(2)})`;
             });
-            const detailsString = detailsArray.join(" | ");
-            const fullDetails = detailsString + " || Total: ₦" + cart.total.toFixed(2);
+            const detailsString = detailsArray.join("|");
+            const fullDetails = detailsString + " ||Total: ₦" + cart.total.toFixed(2);
 
-            // Populating the input field
+            //*__Populating the input field__*
             const inputField = document.getElementById("productDetailsInput");
             const inputPrice = document.getElementById("InputPrice");
 
@@ -536,16 +451,31 @@ document.addEventListener("DOMContentLoaded", function() {
      }
 
 
-        //*Fill the second form*
+        //*__Function to update the cart count__*
+        function updateCartCount() {
+            const cartCount = document.getElementById('addNo');
+            const cartText = document.getElementById('cart-text');
+
+            if (cartCount) {
+                cartCount.textContent = cart.items.length;
+            }
+
+            if (cart.items.length > 0) {
+                cartText.style.display = 'none'; 
+                // cartCount.style.display = 'inline'; 
+            } else {
+                cartText.style.display = 'none'; 
+            }
+        }
+
+        //*__Fill the second form__*
+        //*__Get values from the first form__*
         function populateSecondForm() {
-            // Get values from the first form
             var userEmail = document.getElementById("email").value;
             var userOrderNo = document.getElementById("orderNumber").value;
 
-            // Populate email input in the second form
             document.getElementById("InputEmail").value = userEmail;
 
-            // Populate order number input in the second form
             document.getElementById("orderNumberRef").value = userOrderNo;
         }
 
@@ -567,15 +497,14 @@ document.addEventListener("DOMContentLoaded", function() {
             updateTotal();
             updateButtonVisibility();
 
-            if (cart.items.length == 0) { // Check if cart is empty
-                cartWrapper.classList.add('close'); // Close the cart
-                location.reload(); // Refresh the page
+            if (cart.items.length == 0) { 
+                cartWrapper.classList.add('close'); 
+                location.reload(); 
             }
 
         }
 
 
-        // Toggle Cart Functionality
         cartToggle.addEventListener('click', function() {
             cartWrapper.classList.toggle('close');
         });
@@ -591,25 +520,25 @@ document.addEventListener("DOMContentLoaded", function() {
         } 
         
        
-       /*== For New Step System ==*/
+       /*== New Step System ==*/
         let currentStep = 1;
 
        function hideAllSteps() {
-            // Hide everything from the 1st step:
+            //*__Hide everything from the 1st step:__*
             document.querySelector('.cart').style.display = 'none';
             document.getElementById('checkout').style.display = 'none';
             
-            // Hide everything from the 2nd step:
+            // *__Hide everything from the 2nd step:__*
             document.querySelector('.form2flex').style.display = 'none';
             document.getElementById('next').style.display = 'none'; 
             
-            // Hide everything from the 3rd step:
+            // *__Hide everything from the 3rd step:__*
             document.getElementById('payment-options').style.display = 'none';
             document.getElementById('notifyButton').style.display = 'none';
             document.getElementById('goBackButton').style.display = 'none';  //  'Go Back' button
             document.getElementById('cancelOrderButton').style.display = 'none';  //  'Cancel Order' button
             
-            // Hide everything from the 4th step:
+            // *__Hide everything from the 4th step:__*
             document.getElementById('final-step').style.display = 'none';
         }
 
@@ -639,14 +568,14 @@ document.addEventListener("DOMContentLoaded", function() {
         function populateOrderDetails() {
         const orderDetailsElem = document.getElementById("order-details");
 
-        // Get product details
+        //*__Get product details__*
         let productDetailsHTML = '<h4>Products Ordered:</h4><ul>';
         cart.items.forEach(item => {
             productDetailsHTML += `<li>${item.productName} - (Qty: ${document.querySelector(`#${item.product} .quantity-value`).value}  Price: ₦ ${(item.productPrice).toFixed(2)})</li>`;
         });
         productDetailsHTML += '</ul>';
 
-        // Gather order number, name, phone, and location
+        //*__Get order number, name, phone, and location__*
         const orderNumber = document.getElementById("orderNumber").value;
         const name = document.getElementById("name").value;
         const phone = document.getElementById("phone").value;
@@ -655,7 +584,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const otherLocations = document.getElementById("other-locations").value;
         const email = document.getElementById("email").value;
 
-        // Gather selected payment method values
+        //*__Get selected payment method values__*
         const selectedBank = document.querySelector('input[name="bank"]:checked');
         const selectedCreditCard = document.querySelector('input[name="payment-method"]:checked');
 
@@ -673,7 +602,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             ${productDetailsHTML}
             <h4>Order Information:</h4>
-            <p>Order Number: ${orderNumber}</p>
+            <p>Order Number: <strong style="color: #ff6600;">${orderNumber}</strong></p>
             <p>Name: ${name}</p>
             <p>Phone: ${phone}</p>
             <p>Location: ${location}</p>
@@ -683,18 +612,16 @@ document.addEventListener("DOMContentLoaded", function() {
             <h5><strong>Payment Method:</strong></h5>
             ${paymentMethodHTML}
             <p>Date and Time: ${getDateTime()}</p>
-            <p><strong>Note:</strong> ${info}</p>
+            <p style="color: #ff6600; font-style: italic; font-weight: 600;"><strong style="color: #000000; font-style: normal;">Note:</strong> ${info}</p>
             <p>Subtotal: ₦${cart.subtotal.toFixed(2)}</p>
             <p><strong>Total: ₦${cart.total.toFixed(2)}</strong></p>
         `;
         }
 
 
-
-
         /*== Update for Steps ==*/
         function updateStep() {
-            hideAllSteps();  // Hide all steps first
+            hideAllSteps(); 
 
             if (currentStep == 1 || cart.items.length == 0) {
                 document.getElementById('ks').style.display = 'block';
@@ -708,7 +635,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.querySelector('.cart').style.display = 'block';
                     document.getElementById('checkout').style.display = 'block';
 
-                    // Ensure "Finalize" and "Next" buttons are hidden in the first step
                     document.getElementById('finalizeOrder').style.display = 'none';
                     document.getElementById('next').style.display = 'none';
                     break;
@@ -716,7 +642,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.querySelector('.form2flex').style.display = 'block';
                     document.getElementById('next').style.display = 'block';
 
-                    // Hide the totals for step 2
                     document.getElementById('subtotal-label').style.display = 'none';
                     document.getElementById('subtotal').style.display = 'none';
                     document.getElementById('total-label').style.display = 'none';
@@ -749,7 +674,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             }
 
-            // Adjust visibility of "Keep Shopping" button
             if (currentStep == 1 || cart.items.length == 0) {
                 document.getElementById('ks').style.display = 'block';
             } else {
@@ -759,7 +683,6 @@ document.addEventListener("DOMContentLoaded", function() {
             
 
             if (cart.items.length == 0) {
-                // Hide all other buttons, only show 'Keep Shopping' button.
                 document.getElementById('checkout').style.display = 'none';
                 document.getElementById('next').style.display = 'none';
                 document.getElementById('notifyButton').style.display = 'none';
@@ -773,6 +696,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     const orderNo = generateOrderNumber();
                     orderNumberInput.value = orderNo;
                 }
+
+                window.addEventListener('beforeunload', handleBeforeUnload);
                 
             }
 
@@ -788,48 +713,82 @@ document.addEventListener("DOMContentLoaded", function() {
             updateTotal();
             populateProductDetailsInput();
 
-            // Update prices based on the current quantity
+            //*__Update prices based on the current quantity__*
             cart.items.forEach(item => {
                 const quantityInput = document.querySelector(`#${item.product} .quantity-value`);
                 const newQuantity = parseInt(quantityInput.value, 10);
 
-                // Update the quantity in the cart
                 item.quantity = newQuantity;
 
-                // Update the productUpdatedPrice based on the new quantity
+
                 item.productUpdatedPrice = item.productPrice * newQuantity;
 
-                // Update the displayed productUpdatedPrice
                 const productUpdatedPriceElement = document.querySelector(`#${item.productPrice} .updated-product-price`);
                 productUpdatedPriceElement.textContent = item.productUpdatedPrice;
 
             });
 
-            // Recalculate subtotal and total
             updateSubtotal();
             updateTotal();
 
         });
 
-        document.getElementById('next').addEventListener('click', function() {
-            
-            // Check phone and email validity before proceeding
+       
+
+        //*==RECAPTCHER SETTINGS..==*
+
+            // Function to handle reCAPTCHA validation
+            function handleRecaptchaValidation() {
+                const recaptchaResponse = grecaptcha.getResponse();
+                if (recaptchaResponse === '') {
+                    document.getElementById('error-captcha').innerText = 'Please complete the reCAPTCHA.';
+                    return false;
+                } else {
+                    document.getElementById('error-captcha').innerText = '';
+                    return true;
+                }
+            }
+
+               document.getElementById('next').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            //*__Proceed with the next step logic__*
+            //*__Check phone and email validity before proceeding__*
             const phoneInput = document.getElementById('phone');
             const emailInput = document.getElementById('email');
-            // Validate email and phone
-            const isPhoneValid = validatePhone(phoneInput.value);
+
+            //*__Validate email__*
             const isEmailValid = validateEmail(emailInput.value);
             const invalidMsg = document.getElementById('invalidMsg');
 
-            if (!validatePhone(phoneInput.value) && !validateEmail(emailInput.value)) {
-                // alert('Please enter a valid phone number/email.');
+            if (!isEmailValid) {
                 emailInput.classList.add('invalid-input');
-                invalidMsg.style.display = "block";
+                invalidMsg.textContent = 'Invalid email';
+                invalidMsg.style.display = 'block';
                 currentStep = 2;
                 updateStep();
             } else {
-                invalidMsg.style.display = "none";
+                invalidMsg.style.display = 'none';
                 emailInput.classList.remove('invalid-input');
+
+                //__*Perform reCAPTCHA validation__*
+                const isRecaptchaValid = handleRecaptchaValidation();
+
+                const startRecaptMsg = document.getElementById('recaptMsgMsg');
+                let startRecaptChar = document.getElementById('payment-options');
+
+                if (!isRecaptchaValid) {
+                    // recaptchaErrors.style.display = 'block';
+                    // break the loop or continue prompting
+                    startRecaptMsg.style.display = 'block';
+                    startRecaptMsg.style.opacity = 1;
+                    startRecaptChar.style.background = '#d66e0057';
+                    startRecaptChar.style.opacity = 0.4;
+                    alert('Please complete the reCAPTCHA.');
+                    return;
+                }
+
+                //*__Proceed to the next step if both email and reCAPTCHA are valid__
                 currentStep = 3;
                 updateStep();
                 populateSecondForm();
@@ -837,17 +796,25 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateTotal();
                 populateProductDetailsInput();
             }
-                    
+
+             const startRecaptMsg = document.getElementById('recaptMsgMsg');
+             let startRecaptChar = document.getElementById('payment-options');
+
+            startRecaptMsg.style.display = 'none';
+            startRecaptMsg.style.opacity = 1;
+            startRecaptChar.style.background = 'transparent';
+            startRecaptChar.style.opacity = 1;
+
+
         });
 
 
+
         function validatePhone(phone) {
-            // Phone number must contain '0' and have at least 11 digits
             const phoneRegex = /0\d{10,}/;
             return phoneRegex.test(phone);
             }
 
-            // validate email format
             function validateEmail(email) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(email);
@@ -855,109 +822,139 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
         document.getElementById('notifyButton').addEventListener('click', function(event) {
-            // event.preventDefault();  // Prevent form submission
 
-            const selectedBank = document.querySelector('.bank-radio:checked');
-            const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
+            stopTimer();
+            removeBeforeUnloadListener();
 
-            const initPayMsg = document.getElementById('initPayMsg');
-            let initPayChar = document.getElementById('payment-options');
+                //*__Proceed with form submission if reCAPTCHA is valid__*
+                const selectedBank = document.querySelector('.bank-radio:checked');
+                const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
 
-            if (!selectedBank && !selectedPaymentMethod) {
-                // alert('Please select a bank or payment method.');
-                event.preventDefault();  // Prevent form submission
+                const initPayMsg = document.getElementById('initPayMsg');
+                let initPayChar = document.getElementById('payment-options');
 
-                initPayMsg.style.display = "block";
-                initPayMsg.style.opacity = 1;
-                initPayChar.style.background = "#d66e0057";
-                initPayChar.style.opacity = 0.4;
-            } else {
-                // If a radio button or payment method is selected..
-                currentStep = 4;  // To the final step
-                updateStep();
-            }
+                if (!selectedBank && !selectedPaymentMethod) {
+                    event.preventDefault();
+                    //*__Display error message if bank or payment method is not selected__*
+                    initPayMsg.style.display = 'block';
+                    initPayMsg.style.opacity = 1;
+                    initPayChar.style.background = '#d66e0057';
+                    initPayChar.style.opacity = 0.4;
+                } else {
+                    //*__Perform reCAPTCHA validation__*
+                    const isRecaptchaValid = handleRecaptchaValidation();
+
+                const startRecaptMsg = document.getElementById('recaptMsgMsg');
+                let startRecaptChar = document.getElementById('payment-options');
 
 
+                    if (isRecaptchaValid) {
+                        currentStep = 4;
+                        updateStep();
+                        document.getElementById('cartForm').submit();
+                        startRecaptMsg.style.display = 'none';
+                        startRecaptMsg.style.opacity = 1;
+                        startRecaptChar.style.background = 'transparent';
+                        startRecaptChar.style.opacity = 1;
+
+                    } else {
+                        event.preventDefault();
+                        //*__For error message or take appropriate action if reCAPTCHA validation fails__*
+                        startRecaptMsg.style.display = 'block';
+                        startRecaptMsg.style.opacity = 1;
+                        startRecaptChar.style.background = '#d66e0057';
+                        startRecaptChar.style.opacity = 0.4;
+                    }
+                }
+
+                
+ 
         });
+
 
 
         document.getElementById('goBackButton').addEventListener('click', function() {
             currentStep = 2;
             updateStep();
+
+            const startRecaptMsg = document.getElementById('recaptMsgMsg');
+            let startRecaptChar = document.getElementById('payment-options');
+
+            startRecaptMsg.style.display = 'none';
+            startRecaptMsg.style.opacity = 1;
+            startRecaptChar.style.background = 'transparent';
+            startRecaptChar.style.opacity = 1;
+
         });
 
-
-
-        // document.querySelectorAll('.add-to-cart').forEach(button => {
-        //     button.addEventListener('click', addToCart);
-        // });
-
-        // Event listener to handle click events on the parent element
-            document.addEventListener('click', function(event) {
-                // Check if the clicked element is the buy button
-                if (event.target && event.target.classList.contains('add-to-cart')) {
-                    // Call addToCart function passing the event
-                    addToCart(event);
-                }
-            });
-
-
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('add-to-cart')) {
+                addToCart(event);
+            }
+        });
 
         document.getElementById('cancelOrderButton').addEventListener('click', function() {
             clearCart();
-            cartWrapper.classList.add('close'); // Close the cart
-            location.reload(); // Refresh the page
+            cartWrapper.classList.add('close');
+            location.reload();
         });
 
 
 
              document.getElementById('finalizeOrder').addEventListener('click', function() {
-            // window.location.href = 'index.html'; // Redirect to the homepage.
-            location.reload(); // Redirect to last location.
+            location.reload(); 
         });
-
-
 
        /*==paysstacks==*/
         function handleForm() {
-            // Gather form data for paystack
+            //*__Gather form data for paystack__*
             const formData = {
                 email: document.getElementById("InputEmail").value,
                 amount: document.getElementById("InputPrice").value,
                 orderNumberRef: document.getElementById("orderNumberRef").value,
-                // Add more form fields as needed
             };
 
-
-            // calls Paystack logic
             payWithPaystack(formData);
         }
 
         function payWithPaystack(formData) {
+
+            //*__Verify reCAPTCHA completion__*
+            const isRecaptchaValid = handleRecaptchaValidation();
+
+            if (!isRecaptchaValid) {
+                const recaptchaErrorMsg = document.getElementById('errcaptcha');
+                recaptchaErrorMsg.textContent = 'Please complete the reCAPTCHA.';
+                recaptchaErrorMsg.style.display = 'block';
+                alert('Please complete the reCAPTCHA.');
+                return;
+            }
+
+
             let handler = PaystackPop.setup({
-                key: 'pk_test_6b1cc58f2827ac858c2d25c77ee1d78498cb8f9f', // PK
+                // key: 'pk_test_bad57d50b13cdfa9057402b543afa2892866350e',
+                key: 'pk_live_d4fff1f36dac3a20aaa74cbd5a7ebd0338c1b58f',
                 email: formData.email,
                 amount: formData.amount * 100,
-                currency: 'NGN', // Naira
+                currency: 'NGN',
                 ref: formData.orderNumberRef,
                 channel: 'card',
                 onClose: function () {
-                    alert('Window closed.');
+                    alert('Click Okay to Cancel.');
                 },
                 callback: function (response) {
-                    let message = 'Payment complete! Reference: ' + response.reference;
+                    let message = 'Payment Successful! Order No: ' + response.reference;
                     while (true) {
-                        let userConfirmed = confirm(message + '\n\n click to proceed ');
+                        let userConfirmed = confirm(message + '\n\n Click Okay to proceed ');
 
                         if (userConfirmed) {
 
-                            // If the user confirms, submit the form
                             document.getElementById('cartForm').submit();
-                            currentStep = 4; // Moves to the next step to display order details
+                            currentStep = 4;
                             updateStep();
-                            break; // Exit the loop if the user confirms
+                            break;
                         } else {
-                            // break the loop or continue prompting
+                            //*__continue prompting__*
                         }
                     }
                 }
@@ -966,16 +963,13 @@ document.addEventListener("DOMContentLoaded", function() {
             handler.openIframe();
         }
 
-        // Event listener to Paystack button
-        const paystackButton = document.getElementById('paystackButton'); // Paystack button
+        //*__Event listener to Paystack button__*
+        const paystackButton = document.getElementById('paystackButton');
         paystackButton.addEventListener("click", function (e) {
             e.preventDefault();
-            handleForm(); // handleForm directly
+            handleForm();
         }, false);
 
-
-        
-            // Update visibility of buttons on page load
             updateButtonVisibility();
         });
 
@@ -1002,41 +996,49 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
         /*==Radio Buttons Controls==*/
-
-        //*Get all radio buttons with the class 'bank-radio'*
         const bankRadios = document.querySelectorAll(".bank-radio");
 
-        bankRadios.forEach(function(radio) {
-        radio.addEventListener("change", function() {
-            // Hide all bank details initially
-            const allBankDetails = document.querySelectorAll(".bank-details");
-            allBankDetails.forEach(function(bankDetail) {
-                bankDetail.style.display = "none";
-            });
+        const tmrElements = document.querySelectorAll(".tmr");
+        const noteMsgElements = document.querySelectorAll(".note-msg");
 
-            // Show the bank details
-            const value = radio.value;
-            const bankDetailToShow = document.querySelector(".bank-details." + value);
-            
-            const initPayMsgRad = document.getElementById('initPayMsg');
-            let initPayCharRad = document.getElementById('payment-options');
-
-            if (bankDetailToShow) {
-                bankDetailToShow.style.display = "block";
-            }
-
-            initPayMsgRad.style.display = "none";
-            initPayCharRad.style.background = "transparent";
-            initPayCharRad.style.opacity = 1;
-
-
-            // Start the timer
-            startTimer();
+        tmrElements.forEach(function(element) {
+            element.style.display = "none";
         });
-    });
+
+        noteMsgElements.forEach(function(element) {
+            element.style.display = "none";
+        });
+
+        bankRadios.forEach(function(radio) {
+            radio.addEventListener("change", function() {
+                const allBankDetails = document.querySelectorAll(".bank-details");
+                allBankDetails.forEach(function(bankDetail) {
+                    bankDetail.style.display = "none";
+                });
+
+                const value = radio.value;
+                const bankDetailToShow = document.querySelector(".bank-details." + value);
+                const initPayMsgRad = document.getElementById('initPayMsg');
+                let initPayCharRad = document.getElementById('payment-options');
 
 
-    //*Radio associated with credit card*
+                if (bankDetailToShow) {
+                    bankDetailToShow.style.display = "block";
+                    const associatedElements = bankDetailToShow.parentElement.querySelectorAll(".tmr, .note-msg");
+                    associatedElements.forEach(function(element) {
+                        element.style.display = "block";
+                    });
+
+                    initPayMsgRad.style.display = "none";
+                    initPayCharRad.style.background = "transparent";
+                    initPayCharRad.style.opacity = 1;
+                }
+            });
+        });
+
+
+ 
+    //*__Radio associated with credit card__*
     document.addEventListener("DOMContentLoaded", function() {
         const paymentMethods = document.querySelectorAll(".payment-method");
         
@@ -1058,19 +1060,16 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
 
-        /*__Radio Buttons Modifications 2__*/
+        /*__Radio Buttons Block__*/
 
-        // Event listener to the credit card radio button
         const creditCardRadio = document.querySelector('.payment-method');
         const hiddenPaymentMethodInput = document.getElementById('selectedPaymentMethod');
         const initPayMsgRadb = document.getElementById('initPayMsg');
         let initPayCharRadb = document.getElementById('payment-options');
         creditCardRadio.addEventListener('change', function () {
 
-            // Set the value of the hidden input to the selected payment method
             hiddenPaymentMethodInput.value = creditCardRadio.value;
 
-            // Unselect or untick bank transfer radio buttons
             const bankRadios = document.querySelectorAll('.bank-radio');
             bankRadios.forEach(radio => {
                 radio.checked = false;
@@ -1084,16 +1083,12 @@ document.addEventListener("DOMContentLoaded", function() {
             stopTimer();
         });
 
-
-        // Event listener to the bank transfer radio buttons
         const bankRadios = document.querySelectorAll('.bank-radio');
         bankRadios.forEach(radio => {
             radio.addEventListener('change', function () {
 
-                // Set the value of the hidden input to the selected payment method
                 hiddenPaymentMethodInput.value = radio.value;
 
-                // Uncheck the credit card radio button
                 creditCardRadio.checked = false;
 
                 document.querySelector(".credit-card-details").style.display = "none";

@@ -1,3 +1,7 @@
+//*** Js Block initiated and designed by Ben Alley ***
+//*** @ benedictokechukwuemail@gmail.com, ben@benalley.net ***
+//*** Promoted by Clautechzs.com e-commerce production 2023/2024 **
+// ------------------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", function() {
         /*__==Global Variables==__*/
@@ -11,12 +15,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const total = document.getElementById('total');
         let totalQuantity = 0;
 
-        // const productIdToImageMap = {};
-
 
         let timerObject = {
                 timer: null,
-                timeLeft: 15 * 60 // 15 minutes in seconds
+                timeLeft: 15 * 60
             };
 
 
@@ -30,36 +32,20 @@ document.addEventListener("DOMContentLoaded", function() {
             'total': 0
         };
 
-
-        
-        // // Function to handle the beforeunload event
-        // function handleBeforeUnload(event) {
-        //     const currentStep = 2; // In the step number
-        //     if (currentStep === 2) { 
-        //         // Display a confirmation message if the user is on step 2
-        //         event.preventDefault();
-        //         event.returnValue = ''; // For Chrome
-        //         return ''; // For other browsers
-        //     }
-        // }
-
-        // Function to handle the beforeunload event
         function handleBeforeUnload(event) {
-            const currentStep = 2; // Change this to reflect the current step
+            const currentStep = 2; 
             if (currentStep === 2 || currentStep === 3) { 
-                // Display a confirmation message if the user is on step 2 or 3
+
                 event.preventDefault();
-                event.returnValue = ''; // For Chrome
-                return ''; // For other browsers
+                event.returnValue = ''; 
+                return '';
             }
         }
 
-        // Call this function to add the beforeunload event listener
         function addBeforeUnloadListener() {
             window.addEventListener('beforeunload', handleBeforeUnload);
         }
 
-        // Call this function to remove the beforeunload event listener
         function removeBeforeUnloadListener() {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         }
@@ -70,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const keepShoppingButton = document.getElementById('ks');
         if (keepShoppingButton) {
             keepShoppingButton.addEventListener('click', function() {
-                cartWrapper.classList.add('close'); // This closes the cart.
+                cartWrapper.classList.add('close'); 
             });
         }
 
@@ -97,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         /*==Timer==*/
         function startTimer() {
-            stopTimer(); // Ensure no existing timers are running
+            stopTimer();
 
             timerObject.timer = setInterval(function() {
                 timerObject.timeLeft--;
@@ -105,24 +91,24 @@ document.addEventListener("DOMContentLoaded", function() {
                 let seconds = timerObject.timeLeft % 60;
                 
                 if(seconds < 10) {
-                    seconds = '0' + seconds; // format to look like 02s instead of 2s
+                    seconds = '0' + seconds;
                 }
 
                 document.getElementById("countdown").textContent = `${minutes}m ${seconds}s`;
 
                 if (timerObject.timeLeft <= 0) {
-                    stopTimer(); // Clear the interval
+                    stopTimer(); 
                     alert("Time's up! Order has been cancelled.");
 
                     clearCart();
-                    cartWrapper.classList.add('close'); // Close the cart
-                    location.reload(); // Refresh the page  
+                    cartWrapper.classList.add('close'); 
+                    location.reload(); 
                 }
             }, 1000);
         }
 
 
-        /*__Radio Buttons Modifications 2__*/
+        /*__Radio Buttons Block__*/
         const bankRadios = document.querySelectorAll(".bank-radio");
 
                 bankRadios.forEach(function(radio) {
@@ -179,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 updateTotal();
             });
 
-            // Capture product details
+            //*__Capture product details__*
             let product = event.target.parentNode;
             let productId = product.id;
             added.unshift(productId);
@@ -189,14 +175,11 @@ document.addEventListener("DOMContentLoaded", function() {
             productPrice = Number(productPrice);
             let productUpdatedPrice = productPrice;
 
-            // // Store the product ID and its corresponding image source in the map
-            // productIdToImageMap[productId] = productImageSrc;
-
             thisClass = product.classList.value.split(' ');
 
             itemClass[productId] = thisClass;
 
-            //*Add to cart model*
+            //*__Add to cart model__*
             cart.items.push({
                 'product': productId,
                 'productName': productName,
@@ -204,11 +187,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 'productUpdatedPrice': productUpdatedPrice,
             });
 
-            // Add a new row for image in image table
             let imageTableRow = document.createElement('tr');
-             // Hmmm..
-            let imgRowId = `img-${productId}`; // Construct the image row ID
-            imageTableRow.setAttribute('id', imgRowId); // Set the ID attribute for the image row
+
+            let imgRowId = `img-${productId}`;
+            imageTableRow.setAttribute('id', imgRowId);
             document.getElementById('cart-table-img-body').appendChild(imageTableRow);
 
             let imageCell = imageTableRow.insertCell(0);
@@ -217,10 +199,10 @@ document.addEventListener("DOMContentLoaded", function() {
             productImage.classList.add('thumbnail');
             imageCell.appendChild(productImage);
 
-            // Add a new row for each product in main table
+            //*__Add a new row for each product in main table__*
             let productRow = document.createElement('tr');
             productRow.setAttribute('id', productId);
-            productRow.setAttribute('data-img-row-id', `img-${productId}`); // Add data attribute
+            productRow.setAttribute('data-img-row-id', `img-${productId}`);
             cartTableBody.appendChild(productRow);
 
             let nameCell = productRow.insertCell(0);
@@ -253,31 +235,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
             $('.slider').toggleClass('close');
             
-            // Ensure the cart-table-img-body, subtotal and total are set to display
             document.getElementById('cart-table-img-body').style.display = 'table-row-group';
             document.getElementById('subtotal').style.display = 'block'; 
             document.getElementById('total').style.display = 'block'; 
 
-
-            // Call the function to update Cart Count
             updateCartCount();
 
-            // // Increment the total quantity by 1 for each product added
-            // totalQuantity++;
 
-            // // Update the cart button to display the total quantity
-            // document.getElementById('addNo').innerText = `(${totalQuantity})`;
-
-            // Update details after increasing quantity
+            //*__Update details after increasing quantity__*
             updateQuantity(event.target);
             updateSubtotal();
             updateTotal();
             populateProductDetailsInput();
 
-            // Call the function to update the total quantity
-            updateTotalQuantity();
-
-            
+            updateTotalQuantity();     
 
         }
 
@@ -289,99 +260,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
         let productId = parentRow.id;
 
-        // Remove the main item row
         parentRow.remove();
 
-        // Remove the corresponding image row
         let imgRowId = `img-${productId}`;
-        console.log("Image Row ID:", imgRowId); // Log the image row ID
+        console.log("Image Row ID:", imgRowId);
         let imgRow = document.getElementById(imgRowId);
-        console.log("Image Row:", imgRow); // Log the image row
+        console.log("Image Row:", imgRow);
         if (imgRow) {
             imgRow.remove();
             updateSubtotal();
             updateTotal();
 
-            // Call the function to update Cart Count
             updateCartCount();
 
         } else {
-            console.log("Image row not found!"); // Log if image row not found
+            console.log("Image row not found!");
             updateSubtotal();
             updateTotal();
-
-            // Call the function to update Cart Count
             updateCartCount();
         }
 
-        // Update added items list
         let index = added.indexOf(productId);
         if (index !== -1) {
             added.splice(index, 1);
         }
 
-        // Update cart items list
+        //*__Update cart items list__*
         cart.items = cart.items.filter(item => item.product !== productId);
 
-        // Call the function to update Cart Count
         updateCartCount();
-
-
-        // Update the quantity of the removed item
-        // let removedItemId = event.target.parentElement.id;
-        // let removedItem = cart.items.find(item => item.product === removedItemId);
-        
-        // if (removedItem) {
-        //     // Decrement the total quantity by the quantity of the removed item
-        //     if (!isNaN(removedItem.quantity) && Number.isInteger(removedItem.quantity)) {
-        //         totalQuantity -= removedItem.quantity;
-        //     }
-            
-        //     // Update the cart button to display the updated total quantity
-        //     document.getElementById('addNo').innerText = `(${totalQuantity})`;
-        // }
-
-        // Decrement the total quantity by 1 when an item is removed
-
-            // let parentBody = parentRow.parentNode;
-            // let parentRowId = parentRow.id;
-
-            // let productId = parentRow.id;
-
-
-            // // Remove the main item
-            // parentBody.removeChild(parentRow);
-
-            // // Remove the main item
-            // // parentRow.parentNode.removeChild(parentRow);
-
-            //  //*Remove the thumbnail*
-            // let imgTableBody = document.getElementById('cart-table-img-body');
-            // let imgRow = imgTableBody.querySelector('tr');
-            // if (imgRow) {
-            //     imgTableBody.removeChild(imgRow);
-
-            //     updateSubtotal();
-            //     updateTotal();
-            // }
-
-            // Update added items list
-            // var index = added.indexOf(parentRowId);
-            // if (index !== -1) {
-            //     added.splice(index, 1);
-            // }
-
-            // Update cart items list
-            // cart.items = cart.items.filter(item => item.product !== productId);
-
-
-            // Update cart items list
-            // for (let item of cart.items) {
-            //     if (item.product === parentRowId) {
-            //         let idx = cart.items.indexOf(item);
-            //         cart.items.splice(idx, 1);
-            //     }
-            // }
 
             cartTableBody.addEventListener('input', function(event) {
                 if (event.target && event.target.classList.contains('quantity-value')) {
@@ -399,24 +306,13 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
 
-            // //*Remove the thumbnail*
-            // let imgTableBody = document.getElementById('cart-table-img-body');
-            // let imgRow = imgTableBody.querySelector('tr');
-            // if (imgRow) {
-            //     imgTableBody.removeChild(imgRow);
-
-            //     updateSubtotal();
-            //     updateTotal();
-            // }
-
-            /*__Empty Cart Modifications 1__*/
-            //*If no items remain in the cart, hide necessary elements*
+            /*__Empty Cart Block__*/
             if (cart.items.length == 0) {
                 document.getElementById('checkout').style.display = 'none';
                 document.getElementById('subtotal').style.display = 'none'; 
                 document.getElementById('total').style.display = 'none'; 
                 document.getElementById('cart-table-img-body').style.display = 'none'; 
-            } else {  // If there are items, ensure these elements are visible
+            } else {  
                 document.getElementById('checkout').style.display = 'block';
                 document.getElementById('subtotal-wrapper').style.display = 'block'; 
                 document.getElementById('total-wrapper').style.display = 'block'; 
@@ -424,14 +320,11 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             
            
-            /*__Empty Cart Modifications 2__*/
-            // Check if cart is empty
+            /*__Check if cart is empty__*/
             if (cart.items.length === 0) {
-                cartWrapper.classList.add('close'); // Close the cart
-                location.reload(); // Refresh the page
+                cartWrapper.classList.add('close'); 
+                location.reload(); 
                 }
-
-                 // Call the function to update Cart Count
                  updateCartCount();
 
              }
@@ -461,14 +354,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 
             }
 
-            //*Getting the input value of quantity and converting to a number*
             let inputQuantityValue = Number(inputElem.value);
 
             if (inputQuantityValue <= 0) {
                 removeFromCart(inputElem);
             } else {
-                let totalPrice = inputQuantityValue * productPrice;  // Multiplying the quantity with the product price
-                updatedPrice.innerHTML = totalPrice.toFixed(2);  // Setting the updated price
+                let totalPrice = inputQuantityValue * productPrice;  
+                updatedPrice.innerHTML = totalPrice.toFixed(2); 
 
                 for (let item of cart.items) {
                     if (item.product === parentRowId) {
@@ -530,9 +422,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
 
-        /*__Fill the Product Details Input field__*/
+        /*__Product Details Input field__*/
         function populateProductDetailsInput() {
-            // Constructing the product details string
             let detailsArray = cart.items.map(item => {
                 const qty = document.querySelector(`#${item.product} .quantity-value`).value;
                 return `${item.productName} (Qty: ${qty} Price: ₦${(item.productPrice).toFixed(2)})`;
@@ -540,7 +431,7 @@ document.addEventListener("DOMContentLoaded", function() {
             const detailsString = detailsArray.join("|");
             const fullDetails = detailsString + " ||Total: ₦" + cart.total.toFixed(2);
 
-            // Populating the input field
+            //*__Populating the input field__*
             const inputField = document.getElementById("productDetailsInput");
             const inputPrice = document.getElementById("InputPrice");
 
@@ -560,53 +451,31 @@ document.addEventListener("DOMContentLoaded", function() {
      }
 
 
-        // function to update the cart count
+        //*__Function to update the cart count__*
         function updateCartCount() {
             const cartCount = document.getElementById('addNo');
             const cartText = document.getElementById('cart-text');
 
             if (cartCount) {
-                cartCount.textContent = cart.items.length; // cart object
+                cartCount.textContent = cart.items.length;
             }
 
             if (cart.items.length > 0) {
-                // Show the "Cart" text and count
                 cartText.style.display = 'none'; 
                 // cartCount.style.display = 'inline'; 
             } else {
-                // Hide the "Cart" text and count
                 cartText.style.display = 'none'; 
-                // cartCount.style.display = 'none'; 
             }
         }
 
-
-        // function updateTotalQuantity() {
-        //     let updatedTotalQuantity = 0;
-
-        //     // let totalQuantity = 0;
-
-        //     for (let item of cart.items) {
-        //         if (!isNaN(item.quantity) && Number.isInteger(item.quantity)) {
-        //             totalQuantity += item.quantity;
-        //         }
-        //     }
-
-        //     // Update the cart button to display the updated total quantity
-        //     document.getElementById('addNo').innerText = `(${totalQuantity})`;
-        // }
-
-
-        //*Fill the second form*
+        //*__Fill the second form__*
+        //*__Get values from the first form__*
         function populateSecondForm() {
-            // Get values from the first form
             var userEmail = document.getElementById("email").value;
             var userOrderNo = document.getElementById("orderNumber").value;
 
-            // Populate email input in the second form
             document.getElementById("InputEmail").value = userEmail;
 
-            // Populate order number input in the second form
             document.getElementById("orderNumberRef").value = userOrderNo;
         }
 
@@ -628,15 +497,14 @@ document.addEventListener("DOMContentLoaded", function() {
             updateTotal();
             updateButtonVisibility();
 
-            if (cart.items.length == 0) { // Check if cart is empty
-                cartWrapper.classList.add('close'); // Close the cart
-                location.reload(); // Refresh the page
+            if (cart.items.length == 0) { 
+                cartWrapper.classList.add('close'); 
+                location.reload(); 
             }
 
         }
 
 
-        // Toggle Cart Functionality
         cartToggle.addEventListener('click', function() {
             cartWrapper.classList.toggle('close');
         });
@@ -652,25 +520,25 @@ document.addEventListener("DOMContentLoaded", function() {
         } 
         
        
-       /*== For New Step System ==*/
+       /*== New Step System ==*/
         let currentStep = 1;
 
        function hideAllSteps() {
-            // Hide everything from the 1st step:
+            //*__Hide everything from the 1st step:__*
             document.querySelector('.cart').style.display = 'none';
             document.getElementById('checkout').style.display = 'none';
             
-            // Hide everything from the 2nd step:
+            // *__Hide everything from the 2nd step:__*
             document.querySelector('.form2flex').style.display = 'none';
             document.getElementById('next').style.display = 'none'; 
             
-            // Hide everything from the 3rd step:
+            // *__Hide everything from the 3rd step:__*
             document.getElementById('payment-options').style.display = 'none';
             document.getElementById('notifyButton').style.display = 'none';
             document.getElementById('goBackButton').style.display = 'none';  //  'Go Back' button
             document.getElementById('cancelOrderButton').style.display = 'none';  //  'Cancel Order' button
             
-            // Hide everything from the 4th step:
+            // *__Hide everything from the 4th step:__*
             document.getElementById('final-step').style.display = 'none';
         }
 
@@ -700,14 +568,14 @@ document.addEventListener("DOMContentLoaded", function() {
         function populateOrderDetails() {
         const orderDetailsElem = document.getElementById("order-details");
 
-        // Get product details
+        //*__Get product details__*
         let productDetailsHTML = '<h4>Products Ordered:</h4><ul>';
         cart.items.forEach(item => {
             productDetailsHTML += `<li>${item.productName} - (Qty: ${document.querySelector(`#${item.product} .quantity-value`).value}  Price: ₦ ${(item.productPrice).toFixed(2)})</li>`;
         });
         productDetailsHTML += '</ul>';
 
-        // Gather order number, name, phone, and location
+        //*__Get order number, name, phone, and location__*
         const orderNumber = document.getElementById("orderNumber").value;
         const name = document.getElementById("name").value;
         const phone = document.getElementById("phone").value;
@@ -716,7 +584,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const otherLocations = document.getElementById("other-locations").value;
         const email = document.getElementById("email").value;
 
-        // Gather selected payment method values
+        //*__Get selected payment method values__*
         const selectedBank = document.querySelector('input[name="bank"]:checked');
         const selectedCreditCard = document.querySelector('input[name="payment-method"]:checked');
 
@@ -753,7 +621,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         /*== Update for Steps ==*/
         function updateStep() {
-            hideAllSteps();  // Hide all steps first
+            hideAllSteps(); 
 
             if (currentStep == 1 || cart.items.length == 0) {
                 document.getElementById('ks').style.display = 'block';
@@ -767,7 +635,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.querySelector('.cart').style.display = 'block';
                     document.getElementById('checkout').style.display = 'block';
 
-                    // Ensure "Finalize" and "Next" buttons are hidden in the first step
                     document.getElementById('finalizeOrder').style.display = 'none';
                     document.getElementById('next').style.display = 'none';
                     break;
@@ -775,7 +642,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.querySelector('.form2flex').style.display = 'block';
                     document.getElementById('next').style.display = 'block';
 
-                    // Hide the totals for step 2
                     document.getElementById('subtotal-label').style.display = 'none';
                     document.getElementById('subtotal').style.display = 'none';
                     document.getElementById('total-label').style.display = 'none';
@@ -808,7 +674,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
             }
 
-            // Adjust visibility of "Keep Shopping" button
             if (currentStep == 1 || cart.items.length == 0) {
                 document.getElementById('ks').style.display = 'block';
             } else {
@@ -818,7 +683,6 @@ document.addEventListener("DOMContentLoaded", function() {
             
 
             if (cart.items.length == 0) {
-                // Hide all other buttons, only show 'Keep Shopping' button.
                 document.getElementById('checkout').style.display = 'none';
                 document.getElementById('next').style.display = 'none';
                 document.getElementById('notifyButton').style.display = 'none';
@@ -833,7 +697,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     orderNumberInput.value = orderNo;
                 }
 
-                // Add the event listener for beforeunload
                 window.addEventListener('beforeunload', handleBeforeUnload);
                 
             }
@@ -850,111 +713,70 @@ document.addEventListener("DOMContentLoaded", function() {
             updateTotal();
             populateProductDetailsInput();
 
-            // Update prices based on the current quantity
+            //*__Update prices based on the current quantity__*
             cart.items.forEach(item => {
                 const quantityInput = document.querySelector(`#${item.product} .quantity-value`);
                 const newQuantity = parseInt(quantityInput.value, 10);
 
-                // Update the quantity in the cart
                 item.quantity = newQuantity;
 
-                // Update the productUpdatedPrice based on the new quantity
+
                 item.productUpdatedPrice = item.productPrice * newQuantity;
 
-                // Update the displayed productUpdatedPrice
                 const productUpdatedPriceElement = document.querySelector(`#${item.productPrice} .updated-product-price`);
                 productUpdatedPriceElement.textContent = item.productUpdatedPrice;
 
             });
 
-            // Recalculate subtotal and total
             updateSubtotal();
             updateTotal();
 
         });
 
-        // document.getElementById('next').addEventListener('click', function() {
-            
-        //     // Check phone and email validity before proceeding
-        //     const phoneInput = document.getElementById('phone');
-        //     const emailInput = document.getElementById('email');
-        //     // Validate email and phone
-        //     const isPhoneValid = validatePhone(phoneInput.value);
-        //     const isEmailValid = validateEmail(emailInput.value);
-        //     const invalidMsg = document.getElementById('invalidMsg');
+       
 
-        //     if (!validatePhone(phoneInput.value) && !validateEmail(emailInput.value)) {
-        //         // alert('Please enter a valid phone number/email.');
-        //         emailInput.classList.add('invalid-input');
-        //         invalidMsg.style.display = "block";
-        //         currentStep = 2;
-        //         updateStep();
-        //     } else {
-        //         invalidMsg.style.display = "none";
-        //         emailInput.classList.remove('invalid-input');
-        //         currentStep = 3;
-        //         updateStep();
-        //         populateSecondForm();
-        //         updateSubtotal();
-        //         updateTotal();
-        //         populateProductDetailsInput();
-        //     }
-                    
-        // });
-
-
-        // RECAPTCHER SETTINGS..
+        //*==RECAPTCHER SETTINGS..==*
 
             // Function to handle reCAPTCHA validation
             function handleRecaptchaValidation() {
                 const recaptchaResponse = grecaptcha.getResponse();
                 if (recaptchaResponse === '') {
-                    // If reCAPTCHA response is empty, display an error message
                     document.getElementById('error-captcha').innerText = 'Please complete the reCAPTCHA.';
                     return false;
                 } else {
-                    // If reCAPTCHA response is present, clear any previous error messages
                     document.getElementById('error-captcha').innerText = '';
                     return true;
                 }
             }
 
-
-        // Event listener for the "Next" button
                document.getElementById('next').addEventListener('click', function(event) {
-            // Prevent default form submission behavior
             event.preventDefault();
 
-            // Proceed with the next step logic
-            // Check phone and email validity before proceeding
+            //*__Proceed with the next step logic__*
+            //*__Check phone and email validity before proceeding__*
             const phoneInput = document.getElementById('phone');
             const emailInput = document.getElementById('email');
 
-            // Validate email
+            //*__Validate email__*
             const isEmailValid = validateEmail(emailInput.value);
             const invalidMsg = document.getElementById('invalidMsg');
 
             if (!isEmailValid) {
-                // Display error message if email is invalid
                 emailInput.classList.add('invalid-input');
                 invalidMsg.textContent = 'Invalid email';
                 invalidMsg.style.display = 'block';
                 currentStep = 2;
                 updateStep();
             } else {
-                // Proceed to the next step if email is valid
                 invalidMsg.style.display = 'none';
                 emailInput.classList.remove('invalid-input');
 
-                // Perform reCAPTCHA validation
+                //__*Perform reCAPTCHA validation__*
                 const isRecaptchaValid = handleRecaptchaValidation();
-
-                // const recaptchaErrors = document.getElementById('errornext');
 
                 const startRecaptMsg = document.getElementById('recaptMsgMsg');
                 let startRecaptChar = document.getElementById('payment-options');
 
-                // If reCAPTCHA is not valid, display appropriate error message and return
                 if (!isRecaptchaValid) {
                     // recaptchaErrors.style.display = 'block';
                     // break the loop or continue prompting
@@ -966,7 +788,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     return;
                 }
 
-                // Proceed to the next step if both email and reCAPTCHA are valid
+                //*__Proceed to the next step if both email and reCAPTCHA are valid__
                 currentStep = 3;
                 updateStep();
                 populateSecondForm();
@@ -989,53 +811,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
         function validatePhone(phone) {
-            // Phone number must contain '0' and have at least 11 digits
             const phoneRegex = /0\d{10,}/;
             return phoneRegex.test(phone);
             }
 
-            // validate email format
             function validateEmail(email) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(email);
             }
 
 
-        // document.getElementById('notifyButton').addEventListener('click', function(event) {
-        //     // event.preventDefault();  // Prevent form submission
-
-        //     const selectedBank = document.querySelector('.bank-radio:checked');
-        //     const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
-
-        //     const initPayMsg = document.getElementById('initPayMsg');
-        //     let initPayChar = document.getElementById('payment-options');
-
-        //     if (!selectedBank && !selectedPaymentMethod) {
-        //         // alert('Please select a bank or payment method.');
-        //         event.preventDefault();  // Prevent form submission
-
-        //         initPayMsg.style.display = "block";
-        //         initPayMsg.style.opacity = 1;
-        //         initPayChar.style.background = "#d66e0057";
-        //         initPayChar.style.opacity = 0.4;
-        //     } else {
-        //         // If a radio button or payment method is selected..
-        //         currentStep = 4;  // proceed to the final step
-        //         updateStep();
-        //     }
-
-
-        // });
-
-
-        // Event listener for the "Notify" button
         document.getElementById('notifyButton').addEventListener('click', function(event) {
-            // Prevent default form submission behavior
-            // event.preventDefault();
+
             stopTimer();
             removeBeforeUnloadListener();
 
-                // Proceed with form submission if reCAPTCHA is valid
+                //*__Proceed with form submission if reCAPTCHA is valid__*
                 const selectedBank = document.querySelector('.bank-radio:checked');
                 const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked');
 
@@ -1043,14 +834,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 let initPayChar = document.getElementById('payment-options');
 
                 if (!selectedBank && !selectedPaymentMethod) {
-                    event.preventDefault();  // Prevent form submission
-                    // Display error message if bank or payment method is not selected
+                    event.preventDefault();
+                    //*__Display error message if bank or payment method is not selected__*
                     initPayMsg.style.display = 'block';
                     initPayMsg.style.opacity = 1;
                     initPayChar.style.background = '#d66e0057';
                     initPayChar.style.opacity = 0.4;
                 } else {
-                    // Perform reCAPTCHA validation
+                    //*__Perform reCAPTCHA validation__*
                     const isRecaptchaValid = handleRecaptchaValidation();
 
                 const startRecaptMsg = document.getElementById('recaptMsgMsg');
@@ -1058,11 +849,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
                     if (isRecaptchaValid) {
-                        // Proceed to the final step if bank or payment method is selected and reCAPTCHA is valid
                         currentStep = 4;
                         updateStep();
                         document.getElementById('cartForm').submit();
-                        // hide prompting
                         startRecaptMsg.style.display = 'none';
                         startRecaptMsg.style.opacity = 1;
                         startRecaptChar.style.background = 'transparent';
@@ -1070,8 +859,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     } else {
                         event.preventDefault();
-                        // Display error message or take appropriate action if reCAPTCHA validation fails
-                        // break the loop or continue prompting
+                        //*__For error message or take appropriate action if reCAPTCHA validation fails__*
                         startRecaptMsg.style.display = 'block';
                         startRecaptMsg.style.opacity = 1;
                         startRecaptChar.style.background = '#d66e0057';
@@ -1099,55 +887,42 @@ document.addEventListener("DOMContentLoaded", function() {
 
         });
 
-
-
-        // document.querySelectorAll('.add-to-cart').forEach(button => {
-        //     button.addEventListener('click', addToCart);
-        // });
-        // Event listener to handle click events on the parent element
         document.addEventListener('click', function(event) {
-            // Check if the clicked element is the buy button
             if (event.target && event.target.classList.contains('add-to-cart')) {
-                // Call addToCart function passing the event
                 addToCart(event);
             }
         });
 
         document.getElementById('cancelOrderButton').addEventListener('click', function() {
             clearCart();
-            cartWrapper.classList.add('close'); // Close the cart
-            location.reload(); // Refresh the page
+            cartWrapper.classList.add('close');
+            location.reload();
         });
 
 
 
              document.getElementById('finalizeOrder').addEventListener('click', function() {
-            // window.location.href = 'index.html'; // Redirect to the homepage.
-            location.reload(); // Redirect to last location.
+            location.reload(); 
         });
 
        /*==paysstacks==*/
         function handleForm() {
-            // Gather form data for paystack
+            //*__Gather form data for paystack__*
             const formData = {
                 email: document.getElementById("InputEmail").value,
                 amount: document.getElementById("InputPrice").value,
                 orderNumberRef: document.getElementById("orderNumberRef").value,
-                // Add more form fields as needed
             };
 
-            // calls Paystack logic
             payWithPaystack(formData);
         }
 
         function payWithPaystack(formData) {
 
-            // Verify reCAPTCHA completion
+            //*__Verify reCAPTCHA completion__*
             const isRecaptchaValid = handleRecaptchaValidation();
 
-            // Proceed only if reCAPTCHA is valid
             if (!isRecaptchaValid) {
-                // Display error message if reCAPTCHA validation fails
                 const recaptchaErrorMsg = document.getElementById('errcaptcha');
                 recaptchaErrorMsg.textContent = 'Please complete the reCAPTCHA.';
                 recaptchaErrorMsg.style.display = 'block';
@@ -1157,11 +932,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
             let handler = PaystackPop.setup({
-                // key: 'pk_test_bad57d50b13cdfa9057402b543afa2892866350e', // PK
-                key: 'pk_live_d4fff1f36dac3a20aaa74cbd5a7ebd0338c1b58f', // PK
+                // key: 'pk_test_bad57d50b13cdfa9057402b543afa2892866350e',
+                key: 'pk_live_d4fff1f36dac3a20aaa74cbd5a7ebd0338c1b58f',
                 email: formData.email,
                 amount: formData.amount * 100,
-                currency: 'NGN', // Naira
+                currency: 'NGN',
                 ref: formData.orderNumberRef,
                 channel: 'card',
                 onClose: function () {
@@ -1174,13 +949,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
                         if (userConfirmed) {
 
-                            // If the user confirms, submit the form
                             document.getElementById('cartForm').submit();
-                            currentStep = 4; // Moves to the next step to display order details
+                            currentStep = 4;
                             updateStep();
-                            break; // Exit the loop if the user confirms
+                            break;
                         } else {
-                            // break the loop or continue prompting
+                            //*__continue prompting__*
                         }
                     }
                 }
@@ -1189,16 +963,13 @@ document.addEventListener("DOMContentLoaded", function() {
             handler.openIframe();
         }
 
-        // Event listener to Paystack button
-        const paystackButton = document.getElementById('paystackButton'); // Paystack button
+        //*__Event listener to Paystack button__*
+        const paystackButton = document.getElementById('paystackButton');
         paystackButton.addEventListener("click", function (e) {
             e.preventDefault();
-            handleForm(); // handleForm directly
+            handleForm();
         }, false);
 
-
-        
-            // Update visibility of buttons on page load
             updateButtonVisibility();
         });
 
@@ -1225,11 +996,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
         /*==Radio Buttons Controls==*/
-
-        // Get all radio buttons with the class 'bank-radio'
         const bankRadios = document.querySelectorAll(".bank-radio");
 
-        // Initially hide tmr and note-msg elements
         const tmrElements = document.querySelectorAll(".tmr");
         const noteMsgElements = document.querySelectorAll(".note-msg");
 
@@ -1243,13 +1011,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         bankRadios.forEach(function(radio) {
             radio.addEventListener("change", function() {
-                // Hide all bank details initially
                 const allBankDetails = document.querySelectorAll(".bank-details");
                 allBankDetails.forEach(function(bankDetail) {
                     bankDetail.style.display = "none";
                 });
 
-                // Show the bank details
                 const value = radio.value;
                 const bankDetailToShow = document.querySelector(".bank-details." + value);
                 const initPayMsgRad = document.getElementById('initPayMsg');
@@ -1258,7 +1024,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 if (bankDetailToShow) {
                     bankDetailToShow.style.display = "block";
-                    // Show associated elements for bank details
                     const associatedElements = bankDetailToShow.parentElement.querySelectorAll(".tmr, .note-msg");
                     associatedElements.forEach(function(element) {
                         element.style.display = "block";
@@ -1273,7 +1038,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
  
-    //*Radio associated with credit card*
+    //*__Radio associated with credit card__*
     document.addEventListener("DOMContentLoaded", function() {
         const paymentMethods = document.querySelectorAll(".payment-method");
         
@@ -1295,19 +1060,16 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
 
-        /*__Radio Buttons Modifications 2__*/
+        /*__Radio Buttons Block__*/
 
-        // Event listener to the credit card radio button
         const creditCardRadio = document.querySelector('.payment-method');
         const hiddenPaymentMethodInput = document.getElementById('selectedPaymentMethod');
         const initPayMsgRadb = document.getElementById('initPayMsg');
         let initPayCharRadb = document.getElementById('payment-options');
         creditCardRadio.addEventListener('change', function () {
 
-            // Set the value of the hidden input to the selected payment method
             hiddenPaymentMethodInput.value = creditCardRadio.value;
 
-            // Unselect or untick bank transfer radio buttons
             const bankRadios = document.querySelectorAll('.bank-radio');
             bankRadios.forEach(radio => {
                 radio.checked = false;
@@ -1321,16 +1083,12 @@ document.addEventListener("DOMContentLoaded", function() {
             stopTimer();
         });
 
-
-        // Event listener to the bank transfer radio buttons
         const bankRadios = document.querySelectorAll('.bank-radio');
         bankRadios.forEach(radio => {
             radio.addEventListener('change', function () {
 
-                // Set the value of the hidden input to the selected payment method
                 hiddenPaymentMethodInput.value = radio.value;
 
-                // Uncheck the credit card radio button
                 creditCardRadio.checked = false;
 
                 document.querySelector(".credit-card-details").style.display = "none";
